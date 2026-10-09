@@ -163,6 +163,30 @@ The application is configured for easy deployment with:
 - Production-ready Flask configuration
 - Persistent external Neon PostgreSQL database
 
+### Deploy to Vercel
+
+This repository includes a Vercel Python Function entry point at
+`api/index.py` and the routing configuration in `vercel.json`.
+
+1. Import the repository into Vercel.
+2. In **Project Settings → Environment Variables**, add the following
+   variables for every environment where the app will run:
+
+   ```env
+   DATABASE_URL=your-Neon-PostgreSQL-connection-string
+   SECRET_KEY=your-long-random-secret
+   OPENROUTER_API_KEY=your-OpenRouter-key
+   ```
+
+   `OPENROUTER_API_KEY` is only required if the translation feature is used.
+   Use a Neon connection string with `sslmode=require`.
+3. Deploy or redeploy the project. Do not upload `.env`; it is intentionally
+   excluded from version control.
+
+Vercel runs the Flask application as a Python Function. The application
+creates the database tables on startup, so the configured database user must
+have permission to create tables.
+
 ## 🔧 Configuration
 
 ### Environment Variables
