@@ -1,5 +1,6 @@
 import os
 import sys
+from urllib.parse import urlsplit
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
@@ -30,6 +31,12 @@ if not database_url:
     raise RuntimeError(
         'DATABASE_URL is not configured. Create a Neon database and set its '
         'connection string in the environment.'
+    )
+parsed_database_url = urlsplit(database_url)
+if parsed_database_url.scheme not in {'postgres', 'postgresql'} or not parsed_database_url.netloc:
+    raise RuntimeError(
+        'DATABASE_URL must be a complete PostgreSQL connection string, for '
+        'example postgresql://user:password@host/database?sslmode=require.'
     )
 if database_url.startswith('postgres://'):
     database_url = database_url.replace('postgres://', 'postgresql+psycopg://', 1)
